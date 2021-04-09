@@ -61,9 +61,11 @@ public struct TouchPoint {
 public class TouchEvent: Event {
 
     public let points: [TouchPoint]
+    public let isCancelled: Bool
 
-    public init(node: Node, points: [TouchPoint]) {
+    public init(node: Node, points: [TouchPoint], isCancelled: Bool = false) {
         self.points = points
+        self.isCancelled = isCancelled
 
         super.init(node: node)
     }

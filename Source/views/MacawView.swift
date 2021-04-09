@@ -182,7 +182,7 @@ open class MacawView: MView, MGestureRecognizerDelegate {
         super.mTouchesCancelled(touches, with: event)
         zoom.touchesEnded(touches)
 
-        drawingView.touchesEnded(touchPoints: convert(touches: touches))
+        drawingView.touchesEnded(touchPoints: convert(touches: touches), isCancelled: true)
     }
 
     private func convert(touches: Set<MTouch>) -> [MTouchEvent] {
@@ -447,7 +447,7 @@ internal class DrawingView: MView {
         }
     }
 
-    func touchesEnded(touchPoints: [MTouchEvent]) {
+    func touchesEnded(touchPoints: [MTouchEvent], isCancelled: Bool = false) {
         guard let _ = renderer else {
             return
         }
@@ -469,7 +469,7 @@ internal class DrawingView: MView {
 
                 let id = Int(bitPattern: Unmanaged.passUnretained(touch).toOpaque())
                 let point = TouchPoint(id: id, location: loc.toMacaw(), relativeToNodeLocation: nodePath.location.toMacaw(), relativeToViewLocation: relativeToView.toMacaw())
-                let touchEvent = TouchEvent(node: node, points: [point])
+                let touchEvent = TouchEvent(node: node, points: [point], isCancelled: isCancelled)
 
                 node.handleTouchReleased(touchEvent)
                 if let index = touchesOfNode[node]?.firstIndex(of: touch) {
